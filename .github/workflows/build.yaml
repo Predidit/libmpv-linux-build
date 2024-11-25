@@ -1,0 +1,68 @@
+name: Build MPV
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Setup environment
+      run: |
+        sudo apt update
+        sudo apt install -y gcc g++ autoconf automake debhelper glslang-dev ladspa-sdk libasound2-dev \
+            libarchive-dev libbluray-dev libbs2b-dev libcaca-dev libcdio-paranoia-dev libdrm-dev \
+            libdav1d-dev libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
+            libfribidi-dev libgl1-mesa-dev libgbm-dev libgme-dev libgsm1-dev libharfbuzz-dev libjpeg-dev \
+            libbrotli-dev liblcms2-dev liblircclient-dev libmodplug-dev libmp3lame-dev libopenal-dev \
+            libopus-dev libopencore-amrnb-dev libopencore-amrwb-dev libpulse-dev librtmp-dev \
+            librubberband-dev libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
+            libuchardet-dev libv4l-dev libva-dev libvdpau-dev libvorbis-dev libvo-amrwbenc-dev \
+            libunwind-dev libvpx-dev libvulkan-dev libwayland-dev libx264-dev libx11-dev libxext-dev \
+            libxkbcommon-dev libxpresent-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
+            linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
+            x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev libx265-dev \
+            unixodbc-dev libpq-dev libxxhash-dev libaom-dev
+        pip3 install meson
+
+    - name: Build MPV
+      run: |
+        MPV_BUILD_PATH=/tmp/mpv_build
+        rm -rf ${MPV_BUILD_PATH}
+        git clone https://github.com/mpv-player/mpv-build.git ${MPV_BUILD_PATH}
+        git config --global --add safe.directory ${MPV_BUILD_PATH}
+        cd ${MPV_BUILD_PATH}
+
+        printf "%s\n" --enable-gpl >>ffmpeg_options
+        printf "%s\n" --enable-version3 >>ffmpeg_options
+        printf "%s\n" --enable-nonfree >>ffmpeg_options
+        printf "%s\n" --enable-libass >>ffmpeg_options
+        printf "%s\n" --enable-libfreetype >>ffmpeg_options
+        printf "%s\n" --enable-libx264 >>ffmpeg_options
+        printf "%s\n" --enable-libx265 >>ffmpeg_options
+        printf "%s\n" -Dlibmpv=true >mpv_options
+
+        ./use-ffmpeg-release
+        ./use-libass-master
+        ./use-libplacebo-release
+        ./use-mpv-release
+
+        ./rebuild -j$(nproc)
+
+        mkdir -p $GITHUB_WORKSPACE/artifacts
+        cp mpv/build/mpv $GITHUB_WORKSPACE/artifacts
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mpv-binary
+        path: artifacts
