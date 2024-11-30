@@ -80,14 +80,19 @@ jobs:
         printf "%s\n" --enable-libx265 >>ffmpeg_options
         printf "%s\n" -Dlibmpv=true >mpv_options
 
+        echo "build options added"
+
         ./use-ffmpeg-master
         ./use-libass-master
         ./use-libplacebo-master
         ./use-mpv-release
 
+        echo "updating submodules"
+
         ./update
 
-        echo "Applying patches to ffmpeg"
+        echo "applying patches to ffmpeg"
+        
         ls -l
         cd ffmpeg
         for PATCH_FILE in $PATCH_DIR/*.patch; do
