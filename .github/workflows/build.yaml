@@ -59,6 +59,12 @@ jobs:
 
     - name: Build MPV
       run: |
+        PATCH_DIR="${GITHUB_WORKSPACE}/patch"
+        if [ ! -d "$PATCH_DIR" ]; then
+          echo "Patch directory not found: $PATCH_DIR"
+          exit 1
+        fi
+
         MPV_BUILD_PATH=/tmp/mpv_build
         rm -rf ${MPV_BUILD_PATH}
         git clone https://github.com/mpv-player/mpv-build.git ${MPV_BUILD_PATH}
@@ -79,7 +85,22 @@ jobs:
         ./use-libplacebo-master
         ./use-mpv-release
 
-        ./rebuild -j$(nproc)
+        ./update
+
+        cd ffmpeg
+        for PATCH_FILE in $PATCH_DIR/*.patch; do
+          if [ -f "$PATCH_FILE" ]; then
+            echo "Applying patch: $PATCH_FILE"
+            git apply "$PATCH_FILE"
+          else
+            echo "No patch files found in $PATCH_DIR"
+            exit 1
+          fi
+        done
+        cd ../
+
+        ./clean
+        ./build -j$(nproc)
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
