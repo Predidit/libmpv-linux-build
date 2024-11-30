@@ -56,6 +56,9 @@ jobs:
         export C_INCLUDE_PATH=$VULKAN_SDK/include:$C_INCLUDE_PATH
         export LIBRARY_PATH=$VULKAN_SDK/lib:$LIBRARY_PATH
 
+        ls -l $VULKAN_SDK_PATH
+        ls -l $VULKAN_SDK
+
         vulkaninfo | grep "Vulkan Instance Version"
 
     - name: Build MPV
