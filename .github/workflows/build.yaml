@@ -54,9 +54,9 @@ jobs:
         printf "%s\n" --enable-libx265 >>ffmpeg_options
         printf "%s\n" -Dlibmpv=true >mpv_options
 
-        ./use-ffmpeg-release
+        ./use-ffmpeg-master
         ./use-libass-master
-        ./use-libplacebo-release
+        ./use-libplacebo-master
         ./use-mpv-release
 
         ./rebuild -j$(nproc)
