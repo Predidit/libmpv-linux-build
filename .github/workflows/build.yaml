@@ -10,6 +10,11 @@ on:
         description: 'Log level'     
         required: true
         default: 'warning'
+      github_release:
+        description: 'Upload to Github release'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -84,3 +89,35 @@ jobs:
       with:
         name: mpv-binary
         path: artifacts
+
+    - name: Uploading packages to Github release
+      id: upload_packages_gh
+      if: ${{ github.event.inputs.github_release == 'true'}}
+      continue-on-error: true
+      run: |
+        short_date=$(date "+%Y%m%d")
+        body=$(cat <<END
+        **Workflow run**: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+        END
+        )
+        id=$(curl -u Predidit:$GH_TOKEN $CURL_RETRIES -s -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Predidit/libmpv-win32-video-cmake/releases -d @- <<END | jq -r '.id'
+        {
+          "tag_name": "$short_date",
+          "name": "$short_date",
+          "body": "$(echo ${body//$'\n'/'\n'})"
+        }
+        END
+        )
+        file_path="mpv/build/libmpv.so"
+        archive_name="libmpv.so.tar.gz"
+        
+        if [ -f "$file_path" ]; then
+          tar -czf $archive_name -C $(dirname $file_path) $(basename $file_path)
+          
+          curl -u Predidit:$GH_TOKEN $CURL_RETRIES -X POST -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: $(file -b --mime-type $archive_name)" \
+            https://uploads.github.com/repos/Predidit/libmpv-win32-video-cmake/releases/$id/assets?name=$archive_name \
+            --data-binary @$archive_name
+        else
+          echo "libmpv.so not found, skipping upload."
+        fi
