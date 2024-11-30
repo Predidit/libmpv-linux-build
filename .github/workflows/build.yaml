@@ -87,6 +87,8 @@ jobs:
 
         ./update
 
+        echi "Applying patches to ffmpeg"
+        ls -l
         cd ffmpeg
         for PATCH_FILE in $PATCH_DIR/*.patch; do
           if [ -f "$PATCH_FILE" ]; then
