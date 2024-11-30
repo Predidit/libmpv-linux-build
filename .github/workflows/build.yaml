@@ -74,10 +74,10 @@ jobs:
         ./use-libplacebo-master
         ./use-mpv-release
 
-        ./rebuild -j$(nproc)
+        ./rebuild --enable-shared -j$(nproc)
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
-        cp mpv/build/mpv $GITHUB_WORKSPACE/artifacts
+        cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
