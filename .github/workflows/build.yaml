@@ -39,7 +39,8 @@ jobs:
 
     - name: Install Vulkan
       run: |
-        VULKAN_SDK_URL=https://sdk.lunarg.com/sdk/download/1.3.296.0/linux/vulkan-sdk-1.3.296.0.tar.xz?Human=true
+        VULKAN_VERSION=1.3.296.0
+        VULKAN_SDK_URL=https://sdk.lunarg.com/sdk/download/${VULKAN_VERSION}/linux/vulkan-sdk-${VULKAN_VERSION}.tar.xz?Human=true
         VULKAN_SDK_PATH=/tmp/vulkan-sdk
 
         rm -rf ${VULKAN_SDK_PATH}
@@ -49,7 +50,7 @@ jobs:
         tar -xf vulkan-sdk.tar.xz -C ${VULKAN_SDK_PATH} --strip-components=1
         rm -f vulkan-sdk.tar.xz
 
-        export VULKAN_SDK=${VULKAN_SDK_PATH}
+        export VULKAN_SDK=${VULKAN_SDK_PATH}/${VULKAN_VERSION}/x86_64
         export PATH=$VULKAN_SDK/bin:$PATH
         export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
         export C_INCLUDE_PATH=$VULKAN_SDK/include:$C_INCLUDE_PATH
