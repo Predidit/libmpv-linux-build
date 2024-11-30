@@ -52,8 +52,6 @@ jobs:
 
         source ${VULKAN_SDK_PATH}/setup-env.sh
 
-        vulkaninfo | grep "Vulkan Instance Version"
-
     - name: Build MPV
       run: |
         MPV_BUILD_PATH=/tmp/mpv_build
