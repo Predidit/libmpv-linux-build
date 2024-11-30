@@ -50,14 +50,7 @@ jobs:
         tar -xf vulkan-sdk.tar.xz -C ${VULKAN_SDK_PATH} --strip-components=1
         rm -f vulkan-sdk.tar.xz
 
-        export VULKAN_SDK=${VULKAN_SDK_PATH}/${VULKAN_VERSION}/x86_64
-        export PATH=$VULKAN_SDK/bin:$PATH
-        export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
-        export C_INCLUDE_PATH=$VULKAN_SDK/include:$C_INCLUDE_PATH
-        export LIBRARY_PATH=$VULKAN_SDK/lib:$LIBRARY_PATH
-
-        ls -l $VULKAN_SDK_PATH
-        ls -l $VULKAN_SDK
+        sh ${VULKAN_SDK_PATH}/setup-env.sh
 
         vulkaninfo | grep "Vulkan Instance Version"
 
