@@ -74,7 +74,7 @@ jobs:
         ./use-libplacebo-master
         ./use-mpv-release
 
-        ./rebuild --enable-shared -j$(nproc)
+        ./rebuild -j$(nproc)
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
