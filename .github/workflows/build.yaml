@@ -50,7 +50,7 @@ jobs:
         tar -xf vulkan-sdk.tar.xz -C ${VULKAN_SDK_PATH} --strip-components=1
         rm -f vulkan-sdk.tar.xz
 
-        sh ${VULKAN_SDK_PATH}/setup-env.sh
+        source ${VULKAN_SDK_PATH}/setup-env.sh
 
         vulkaninfo | grep "Vulkan Instance Version"
 
