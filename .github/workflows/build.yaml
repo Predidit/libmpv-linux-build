@@ -84,9 +84,6 @@ jobs:
 
         echo "build options added"
 
-        meson setup build --default-library=static
-        echo "meson setup static builds"
-
         ./use-ffmpeg-master
         ./use-libass-master
         ./use-libplacebo-master
