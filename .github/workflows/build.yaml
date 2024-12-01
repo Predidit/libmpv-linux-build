@@ -71,6 +71,7 @@ jobs:
         git config --global --add safe.directory ${MPV_BUILD_PATH}
         cd ${MPV_BUILD_PATH}
 
+        > ffmpeg_options
         printf "%s\n" --enable-gpl >>ffmpeg_options
         printf "%s\n" --enable-version3 >>ffmpeg_options
         printf "%s\n" --enable-nonfree >>ffmpeg_options
@@ -78,6 +79,7 @@ jobs:
         printf "%s\n" --enable-libfreetype >>ffmpeg_options
         printf "%s\n" --enable-libx264 >>ffmpeg_options
         printf "%s\n" --enable-libx265 >>ffmpeg_options
+        printf "%s\n" --disable-gnutls >>ffmpeg_options
         printf "%s\n" --pkg-config=pkg-config >>ffmpeg_options
         printf "%s\n" --pkg-config-flags=--static >>ffmpeg_options
         printf "%s\n" -Dlibmpv=true >mpv_options
