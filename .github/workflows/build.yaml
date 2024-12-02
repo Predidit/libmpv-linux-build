@@ -57,20 +57,6 @@ jobs:
 
         source ${VULKAN_SDK_PATH}/setup-env.sh
 
-    - name: Build X264
-      run: |
-        LIBX264_SDK_PATH=/tmp/libx264-sdk
-
-        rm -rf ${LIBX264_SDK_PATH}
-        mkdir -p ${LIBX264_SDK_PATH}
-        cd ${LIBX264_SDK_PATH}
-        git clone --branch master https://code.videolan.org/videolan/x264.git
-        cd x264
-
-        ./configure CFLAGS="-fPIC" CXXFLAGS="-fPIC" --enable-static --disable-shared
-        make
-        sudo make install
-
     - name: Build MPV
       run: |
         PATCH_DIR="${GITHUB_WORKSPACE}/patch"
@@ -84,6 +70,8 @@ jobs:
         git clone https://github.com/mpv-player/mpv-build.git ${MPV_BUILD_PATH}
         git config --global --add safe.directory ${MPV_BUILD_PATH}
         cd ${MPV_BUILD_PATH}
+
+        export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig:$PKG_CONFIG_PATH
 
         > ffmpeg_options
         printf "%s\n" --pkg-config=pkg-config >>ffmpeg_options
