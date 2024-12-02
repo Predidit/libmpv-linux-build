@@ -55,4 +55,4 @@ cd "$BUILD"/ffmpeg_build
 # need to link against stdc++ in case libplacebo was built with glslang,
 # which requires that
 export LDFLAGS="$LDFLAGS -lstdc++"
-"$BUILD"/ffmpeg/configure --prefix="$BUILD"/build_libs $OPTIONS "$@"
+PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:/home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig" "$BUILD"/ffmpeg/configure --prefix="$BUILD"/build_libs $OPTIONS "$@"
