@@ -46,7 +46,7 @@ jobs:
             libunwind-dev libvpx-dev libwayland-dev libx11-dev libxext-dev \
             libxkbcommon-dev libxpresent-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
-            x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev libx265-dev \
+            x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
             unixodbc-dev libpq-dev libxxhash-dev libaom-dev
         pip3 install meson
 
