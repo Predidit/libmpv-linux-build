@@ -44,9 +44,12 @@ esac
 
 echo "external pkg-config path: $PKG_CONFIG_PATH"
 ls -l $BUILD/build_libs/lib/pkgconfig
+mkdir -p $BUILD/build_libs/include
 echo "add additional pkg-config"
-cp -r /home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig/* $BUILD/build_libs/lib/pkgconfig
+cp -r /home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/* $BUILD/build_libs/lib
+cp -r /home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/include/* $BUILD/build_libs/include
 ls -l $BUILD/build_libs/lib/pkgconfig
+ls -l $BUILD/build_libs/include
 
 echo Using ffmpeg options: $OPTIONS "$@"
 

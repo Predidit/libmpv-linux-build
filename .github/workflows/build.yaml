@@ -76,6 +76,7 @@ jobs:
         mkdir -p ${MPV_BUILD_PATH}
         cp -r ${GITHUB_WORKSPACE}/external/* ${MPV_BUILD_PATH}
         sudo chmod -R 777 ${MPV_BUILD_PATH}
+        sudo chmod -R 777 ${GITHUB_WORKSPACE}
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
