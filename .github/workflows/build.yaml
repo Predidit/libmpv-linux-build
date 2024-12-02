@@ -28,7 +28,7 @@ jobs:
       run: |
         chmod -R 777 ${GITHUB_WORKSPACE}
 
-        export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig:$PKG_CONFIG_PATH
+        export PKG_CONFIG_PATH="/home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig"
         echo 'try to find x264 pkg-config'
         pkg-config --modversion x264
 

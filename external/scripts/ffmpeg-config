@@ -33,6 +33,10 @@ else
     fi
 fi
 
+echo "PKG CONFIG Check Point 1"
+pkg-config --modversion x264
+export PKG_CONFIG_PATH="/home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig"
+
 case "$PKG_CONFIG_PATH" in
   '')
     export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig"
@@ -41,6 +45,9 @@ case "$PKG_CONFIG_PATH" in
     export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:$PKG_CONFIG_PATH"
     ;;
 esac
+
+echo "PKG CONFIG Check Point 2"
+pkg-config --modversion x264
 
 echo Using ffmpeg options: $OPTIONS "$@"
 
