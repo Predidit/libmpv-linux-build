@@ -67,7 +67,7 @@ jobs:
         git clone --branch master https://code.videolan.org/videolan/x264.git
         cd x264
 
-        ./configure --enable-static --disable-shared
+        ./configure CFLAGS="-fPIC" CXXFLAGS="-fPIC" --enable-static --disable-shared
         make
         sudo make install
 
