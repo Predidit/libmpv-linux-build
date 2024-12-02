@@ -33,6 +33,10 @@ else
     fi
 fi
 
+echo "Try add prefix to PKG_CONFIG_PATH"
+export PKG_CONFIG_PATH="/home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig"
+echo "Done. PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+
 case "$PKG_CONFIG_PATH" in
   '')
     export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig"
