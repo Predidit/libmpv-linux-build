@@ -82,7 +82,6 @@ jobs:
 
         > ffmpeg_options
         printf "%s\n" --enable-small >> ffmpeg_options
-        printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-libass >> ffmpeg_options
         printf "%s\n" --disable-gnutls >> ffmpeg_options
         printf "%s\n" --disable-sndio >> ffmpeg_options
