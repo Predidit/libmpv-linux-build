@@ -26,9 +26,19 @@ jobs:
 
     - name: Pkgconfig Debug
       run: |
+        chmod -R 777 ${GITHUB_WORKSPACE}
         echo "external pkgconfig tree"
         echo "${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig"
         ls -R ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
+
+        echo "system pkgconfig tree"
+        ls -R /usr/lib/pkgconfig
+
+        echo "start copy external pkgconfig tree"
+        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/* /usr/lib
+        sudo mkdir -p /usr/include
+        echo "exist sysytem header file"
+        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/include/* /usr/include
 
     - name: Setup environment
       run: |
@@ -76,7 +86,6 @@ jobs:
         mkdir -p ${MPV_BUILD_PATH}
         cp -r ${GITHUB_WORKSPACE}/external/* ${MPV_BUILD_PATH}
         sudo chmod -R 777 ${MPV_BUILD_PATH}
-        sudo chmod -R 777 ${GITHUB_WORKSPACE}
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
