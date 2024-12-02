@@ -73,6 +73,7 @@ jobs:
 
         MPV_BUILD_PATH=/tmp/mpv_build
         rm -rf ${MPV_BUILD_PATH}
+        mkdir -p ${MPV_BUILD_PATH}
         cp -r ${GITHUB_WORKSPACE}/external/* ${MPV_BUILD_PATH}
         cd ${MPV_BUILD_PATH}
 
