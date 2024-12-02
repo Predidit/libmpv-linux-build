@@ -73,8 +73,7 @@ jobs:
 
         MPV_BUILD_PATH=/tmp/mpv_build
         rm -rf ${MPV_BUILD_PATH}
-        git clone https://github.com/mpv-player/mpv-build.git ${MPV_BUILD_PATH}
-        git config --global --add safe.directory ${MPV_BUILD_PATH}
+        cp -r ${GITHUB_WORKSPACE}/external/* ${MPV_BUILD_PATH}
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
@@ -113,7 +112,7 @@ jobs:
         cd ../
 
         ./clean
-        env PKG_CONFIG_PATH="${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig" ./build -j$(nproc)
+        ./build -j$(nproc)
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
