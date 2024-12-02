@@ -79,7 +79,7 @@ jobs:
 
         > ffmpeg_options
         printf "%s\n" --pkg-config=pkg-config >> ffmpeg_options
-        printf "%s\n" "--pkg-config-flags="--static --prefix=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig" >> ffmpeg_options
+        printf "%s\n" --pkg-config-flags="--static --prefix=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig" >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-libx264 >> ffmpeg_options
         printf "%s\n" --enable-libx265 >> ffmpeg_options
