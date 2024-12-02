@@ -46,6 +46,7 @@ esac
 
 echo "PKG CONFIG Check Point"
 pkg-config --modversion x264
+pkg-config --cflags --libs x264
 
 echo Using ffmpeg options: $OPTIONS "$@"
 
