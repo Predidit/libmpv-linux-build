@@ -81,8 +81,6 @@ jobs:
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
-        printf "%s\n" --pkg-config=pkg-config >> ffmpeg_options
-        printf "%s\n" --pkg-config-flags=--static >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-libass >> ffmpeg_options
         printf "%s\n" --disable-gnutls >> ffmpeg_options
