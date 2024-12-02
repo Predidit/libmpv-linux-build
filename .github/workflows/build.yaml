@@ -29,18 +29,18 @@ jobs:
         chmod -R 777 ${GITHUB_WORKSPACE}
 
         echo "system pkgconfig tree"
-        ls -R /usr/local/lib/pkgconfig
+        ls -R /usr/share/pkgconfig
 
         echo "start copy external pkgconfig tree"
-        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/* /usr/local/lib
+        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/* /usr/share
         echo "done"
-        ls -R /usr/local/lib/pkgconfig
-        sudo mkdir -p /usr/local/include
+        ls -R /usr/share/pkgconfig
+        sudo mkdir -p /usr/include
         echo "exist sysytem header file"
-        ls -R /usr/local/include
-        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/include/* /usr/local/include
+        ls -R /usr/include
+        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/include/* /usr/include
         echo "done"
-        ls -R /usr/local/include
+        ls -R /usr/include
 
     - name: Setup environment
       run: |
