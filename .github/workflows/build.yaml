@@ -113,7 +113,7 @@ jobs:
         cd ../
 
         ./clean
-        ./build -j$(nproc)
+        env PKG_CONFIG_PATH="${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig" ./build -j$(nproc)
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
