@@ -24,6 +24,15 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
+    - name: Setup pkgconfig
+      run: |
+        export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
+        echo "PkgConfig loaded"
+        echo "$PKG_CONFIG_PATH"
+
+        echo "external pkgconfig tree"
+        ls -R ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
+
     - name: Setup environment
       run: |
         sudo apt update
@@ -70,8 +79,6 @@ jobs:
         git clone https://github.com/mpv-player/mpv-build.git ${MPV_BUILD_PATH}
         git config --global --add safe.directory ${MPV_BUILD_PATH}
         cd ${MPV_BUILD_PATH}
-
-        export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig:$PKG_CONFIG_PATH
 
         > ffmpeg_options
         printf "%s\n" --pkg-config=pkg-config >>ffmpeg_options
