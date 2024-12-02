@@ -24,7 +24,7 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup pkgconfig
+    - name: Pkgconfig Debug
       run: |
         echo "external pkgconfig tree"
         echo "${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig"
@@ -78,7 +78,7 @@ jobs:
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
-        printf "%s\n" --pkg-config="PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig pkg-config" >> ffmpeg_options
+        printf "%s\n" --pkg-config=pkg-config >> ffmpeg_options
         printf "%s\n" --pkg-config-flags=--static >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-libx264 >> ffmpeg_options
