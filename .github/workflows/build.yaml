@@ -35,7 +35,7 @@ jobs:
             libopus-dev libopencore-amrnb-dev libopencore-amrwb-dev libpulse-dev librtmp-dev \
             librubberband-dev libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
             libuchardet-dev libv4l-dev libva-dev libvdpau-dev libvorbis-dev libvo-amrwbenc-dev \
-            libunwind-dev libvpx-dev libwayland-dev libx264-dev libx11-dev libxext-dev \
+            libunwind-dev libvpx-dev libwayland-dev libx11-dev libxext-dev \
             libxkbcommon-dev libxpresent-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev libx265-dev \
@@ -56,6 +56,20 @@ jobs:
         rm -f vulkan-sdk.tar.xz
 
         source ${VULKAN_SDK_PATH}/setup-env.sh
+
+    - name: Build X264
+      run: |
+        LIBX264_SDK_PATH=/tmp/libx264-sdk
+
+        rm -rf ${LIBX264_SDK_PATH}
+        mkdir -p ${LIBX264_SDK_PATH}
+        cd ${LIBX264_SDK_PATH}
+        git clone --branch master https://code.videolan.org/videolan/x264.git
+        cd x264
+
+        ./configure --enable-static --disable-shared
+        make
+        sudo make install
 
     - name: Build MPV
       run: |
