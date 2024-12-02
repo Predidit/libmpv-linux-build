@@ -28,19 +28,9 @@ jobs:
       run: |
         chmod -R 777 ${GITHUB_WORKSPACE}
 
-        echo "system pkgconfig tree"
-        ls -R /usr/share/pkgconfig
-
-        echo "start copy external pkgconfig tree"
-        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/* /usr/share
-        echo "done"
-        ls -R /usr/share/pkgconfig
-        sudo mkdir -p /usr/include
-        echo "exist sysytem header file"
-        ls -R /usr/include
-        sudo cp -r ${GITHUB_WORKSPACE}/dep/linux_amd64/include/* /usr/include
-        echo "done"
-        ls -R /usr/include
+        export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig:$PKG_CONFIG_PATH
+        echo 'try to find x264 pkg-config'
+        pkg-config --modversion x264
 
     - name: Setup environment
       run: |
