@@ -24,14 +24,14 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Setup pkgconfig
-      run: |
-        export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
-        echo "PkgConfig loaded"
-        echo "$PKG_CONFIG_PATH"
+    # - name: Setup pkgconfig
+    #   run: |
+    #     export PKG_CONFIG_PATH=${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
+    #     echo "PkgConfig loaded"
+    #     echo "$PKG_CONFIG_PATH"
 
-        echo "external pkgconfig tree"
-        ls -R ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
+    #     echo "external pkgconfig tree"
+    #     ls -R ${GITHUB_WORKSPACE}/dep/linux_amd64/lib/pkgconfig
 
     - name: Setup environment
       run: |
@@ -81,16 +81,14 @@ jobs:
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
-        printf "%s\n" --pkg-config=pkg-config >>ffmpeg_options
-        printf "%s\n" --pkg-config-flags=--static >>ffmpeg_options
-        printf "%s\n" --enable-gpl >>ffmpeg_options
-        printf "%s\n" --enable-version3 >>ffmpeg_options
-        printf "%s\n" --enable-nonfree >>ffmpeg_options
-        printf "%s\n" --enable-libass >>ffmpeg_options
-        printf "%s\n" --enable-libfreetype >>ffmpeg_options
-        printf "%s\n" --enable-libx264 >>ffmpeg_options
-        printf "%s\n" --disable-gnutls >>ffmpeg_options
-        printf "%s\n" -Dlibmpv=true >mpv_options
+        printf "%s\n" --pkg-config=pkg-config >> ffmpeg_options
+        printf "%s\n" --pkg-config-flags=--static >> ffmpeg_options
+        printf "%s\n" --enable-gpl >> ffmpeg_options
+        printf "%s\n" --enable-libfreetype >> ffmpeg_options
+        printf "%s\n" --enable-libx264 >> ffmpeg_options
+        printf "%s\n" --enable-libx265 >> ffmpeg_options
+        printf "%s\n" --disable-gnutls >> ffmpeg_options
+        printf "%s\n" -Dlibmpv=true > mpv_options
 
         echo "build options added"
 
