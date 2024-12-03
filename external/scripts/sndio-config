@@ -11,9 +11,6 @@ if test -f "$BUILD"/sndio_options ; then
 fi
 
 OPTIONS="--enable-static"
-if "$BUILD"/scripts/test-libmpv ; then
-    OPTIONS="$OPTIONS --with-pic"
-fi
 
 case "$PKG_CONFIG_PATH" in
   '')
