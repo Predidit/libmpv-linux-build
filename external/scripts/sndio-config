@@ -23,5 +23,5 @@ esac
 
 cd "$BUILD"/sndio
 # Later sndio doesn't automatically run configure with autogen.sh anymore
-./configure  --prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib" $OPTIONS "$@"
+./configure CFLAGS="-fPIC" --prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib" $OPTIONS "$@"
 
