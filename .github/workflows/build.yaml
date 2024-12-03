@@ -88,7 +88,8 @@ jobs:
         printf "%s\n" -Dlibmpv=true > mpv_options
 
         echo "build options added"
-
+        
+        ./use-sndio-master
         ./use-rubberband-master
         ./use-ffmpeg-master
         ./use-libass-master
