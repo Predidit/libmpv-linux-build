@@ -41,7 +41,7 @@ jobs:
             libfribidi-dev libgl1-mesa-dev libgbm-dev libgme-dev libgsm1-dev libharfbuzz-dev libjpeg-dev \
             libbrotli-dev liblcms2-dev liblircclient-dev libmodplug-dev libmp3lame-dev libopenal-dev \
             libopus-dev libopencore-amrnb-dev libopencore-amrwb-dev libpulse-dev librtmp-dev \
-            librubberband-dev libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
+            libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
             libuchardet-dev libv4l-dev libva-dev libvdpau-dev libvorbis-dev libvo-amrwbenc-dev \
             libunwind-dev libvpx-dev libwayland-dev libx11-dev libxext-dev \
             libxkbcommon-dev libxpresent-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
@@ -85,12 +85,11 @@ jobs:
         printf "%s\n" --enable-libass >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-nonfree >> ffmpeg_options
-        printf "%s\n" --disable-sndio >> ffmpeg_options
-        printf "%s\n" --disable-librubberband >> ffmpeg_options
         printf "%s\n" -Dlibmpv=true > mpv_options
 
         echo "build options added"
 
+        ./use-rubberband-master
         ./use-ffmpeg-master
         ./use-libass-master
         ./use-libplacebo-master
