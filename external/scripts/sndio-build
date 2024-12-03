@@ -1,7 +1,4 @@
 #!/bin/sh
 set -e
 
-sudo mkdir /var/run/sndiod
-sudo useradd -r -g audio -s /sbin/nologin -d /var/run/sndiod sndiod
-sudo make -C sndio install "$@"
-sudo ldconfig
+make -C sndio install "$@"
