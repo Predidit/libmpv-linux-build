@@ -44,8 +44,8 @@ case "$PKG_CONFIG_PATH" in
     ;;
 esac
 
-echo "PKG CONFIG Check Point"
-pkg-config --modversion x264 || echo "x264 not found"
+# echo "PKG CONFIG Check Point"
+# pkg-config --modversion x264 || echo "x264 not found"
 
 echo Using ffmpeg options: $OPTIONS "$@"
 
