@@ -86,11 +86,12 @@ jobs:
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-nonfree >> ffmpeg_options
 
-        printf "%s\n" -Dlibmpv=true > mpv_options
-        printf "%s\n" -Dcaca=disabled > mpv_options
-        printf "%s\n" -Djpeg=disabled > mpv_options
-        printf "%s\n" -Dlibbluray=disabled > mpv_options
-        printf "%s\n" -Dsixel=disabled > mpv_options
+        > mpv_options
+        printf "%s\n" -Dlibmpv=true >> mpv_options
+        printf "%s\n" -Dcaca=disabled >> mpv_options
+        printf "%s\n" -Djpeg=disabled >> mpv_options
+        printf "%s\n" -Dlibbluray=disabled >> mpv_options
+        printf "%s\n" -Dsixel=disabled >> mpv_options
 
         echo "build options added"
         
