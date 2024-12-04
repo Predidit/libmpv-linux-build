@@ -85,7 +85,12 @@ jobs:
         printf "%s\n" --enable-libass >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-nonfree >> ffmpeg_options
+
         printf "%s\n" -Dlibmpv=true > mpv_options
+        printf "%s\n" -Dcaca=false > mpv_options
+        printf "%s\n" -Djpeg=false > mpv_options
+        printf "%s\n" -Dlibbluray=false > mpv_options
+        printf "%s\n" -Dsixel=false > mpv_options
 
         echo "build options added"
         
