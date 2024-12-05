@@ -86,6 +86,7 @@ jobs:
         printf "%s\n" --enable-gpl >> ffmpeg_options
         printf "%s\n" --enable-nonfree >> ffmpeg_options
 
+        > mpv_options
         printf "%s\n" -Dlibmpv=true > mpv_options
         printf "%s\n" -Duchardet=enabled > mpv_options
         printf "%s\n" -Dcaca=disabled > mpv_options
