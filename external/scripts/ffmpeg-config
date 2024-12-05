@@ -53,5 +53,5 @@ mkdir -p "$BUILD"/ffmpeg_build
 cd "$BUILD"/ffmpeg_build
 # need to link against stdc++ in case libplacebo was built with glslang,
 # which requires that
-export LDFLAGS="$LDFLAGS $(pkg-config --cflags --static bzip2) $(pkg-config --libs --static bzip2) -lstdc++"
+export LDFLAGS="$LDFLAGS -lstdc++"
 "$BUILD"/ffmpeg/configure --prefix="$BUILD"/build_libs $OPTIONS "$@"
