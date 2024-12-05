@@ -81,7 +81,6 @@ jobs:
         cd ${MPV_BUILD_PATH}
 
         > ffmpeg_options
-        printf "%s\n" --disable-bzlib >> ffmpeg_options
         printf "%s\n" --enable-small >> ffmpeg_options
         printf "%s\n" --enable-libass >> ffmpeg_options
         printf "%s\n" --enable-gpl >> ffmpeg_options
@@ -97,6 +96,7 @@ jobs:
 
         echo "build options added"
         
+        ./use-bzip2-master
         ./use-libxpresent-master
         ./use-uchardet-master
         ./use-rubberband-master
