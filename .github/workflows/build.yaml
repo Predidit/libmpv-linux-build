@@ -57,13 +57,6 @@ jobs:
 
         source ${VULKAN_SDK_PATH}/setup-env.sh
 
-    - name: Uninstall bzip2
-      run: |
-        sudo apt rdepends libbz2-1.0
-        sudo apt remove -y bzip2
-        sudo apt remove -y libbz2-dev
-        sudo dpkg --remove --force-remove-reinstreq libbz2-1.0
-
     - name: Build MPV
       run: |
         PATCH_DIR="${GITHUB_WORKSPACE}/patch"
