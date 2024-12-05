@@ -6,8 +6,8 @@ export LC_ALL=C
 #scripts/fribidi-build "$@"
 # scripts/sndio-config
 # scripts/sndio-build "$@"
-# scripts/bzip2-config
-# scripts/bzip2-build "$@"
+scripts/bzip2-config
+scripts/bzip2-build "$@"
 scripts/uchardet-config
 scripts/uchardet-build "$@"
 scripts/libxpresent-config
