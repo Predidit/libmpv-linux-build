@@ -24,14 +24,6 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Pkgconfig Debug
-      run: |
-        chmod -R 777 ${GITHUB_WORKSPACE}
-
-        export PKG_CONFIG_PATH="/home/runner/work/libmpv-linux-build/libmpv-linux-build/dep/linux_amd64/lib/pkgconfig"
-        echo 'try to find x264 pkg-config'
-        pkg-config --modversion x264
-
     - name: Setup environment
       run: |
         sudo apt update
@@ -49,6 +41,12 @@ jobs:
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
             unixodbc-dev libpq-dev libxxhash-dev libaom-dev
         pip3 install meson
+
+    - name: bzip2 debug
+      run: |
+        sudo apt remove -y bzip2
+        sudo apt remove -y libbz2-dev
+        sudo apt autoremove -y
 
     - name: Install Vulkan
       run: |
@@ -83,7 +81,7 @@ jobs:
         > ffmpeg_options
         printf "%s\n" --enable-small >> ffmpeg_options
         printf "%s\n" --enable-libass >> ffmpeg_options
-        
+
         printf "%s\n" --disable-outdevs >> ffmpeg_options
         printf "%s\n" --disable-filters >> ffmpeg_options
         printf "%s\n" --disable-muxers >> ffmpeg_options
@@ -105,7 +103,6 @@ jobs:
         printf "%s\n" -Dcaca=disabled >> mpv_options
         printf "%s\n" -Djpeg=disabled >> mpv_options
         printf "%s\n" -Dlibbluray=disabled >> mpv_options
-        printf "%s\n" -Dlibarchive=disabled >> mpv_options
         printf "%s\n" -Dsixel=disabled >> mpv_options
 
         echo "build options added"
