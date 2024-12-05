@@ -47,6 +47,7 @@ jobs:
         sudo dpkg -S libbz2.so.1.0
         sudo apt remove -y bzip2
         sudo apt remove -y libbz2-dev
+        sudo apt remove -y libbz2-1.0
         sudo apt autoremove -y
 
     - name: Install Vulkan
