@@ -96,7 +96,6 @@ jobs:
 
         echo "build options added"
         
-        ./use-bzip2-master
         ./use-libxpresent-master
         ./use-uchardet-master
         ./use-rubberband-master

@@ -20,7 +20,7 @@ do_clone_all()
     do_clone "ffmpeg"     "https://github.com/FFmpeg/FFmpeg.git"
     #do_clone "fribidi"    "http://anongit.freedesktop.org/git/fribidi/fribidi.git"
     #do_clone "sndio"      "https://sndio.org/git/sndio"  
-    do_clone "bzip2"      "https://github.com/libarchive/bzip2.git"
+    #do_clone "bzip2"      "https://github.com/libarchive/bzip2.git"
     do_clone "uchardet"   "https://gitlab.freedesktop.org/uchardet/uchardet.git"
     do_clone "libxpresent" "https://gitlab.freedesktop.org/xorg/lib/libxpresent.git"
     do_clone "rubberband" "https://github.com/breakfastquay/rubberband.git"
