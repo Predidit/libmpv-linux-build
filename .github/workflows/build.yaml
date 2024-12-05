@@ -98,7 +98,6 @@ jobs:
         echo "build options added"
         
         ./use-libxpresent-master
-        ./use-sndio-master
         ./use-uchardet-master
         ./use-rubberband-master
         ./use-ffmpeg-master
