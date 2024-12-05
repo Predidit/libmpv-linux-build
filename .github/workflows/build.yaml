@@ -87,6 +87,7 @@ jobs:
         printf "%s\n" --enable-nonfree >> ffmpeg_options
 
         printf "%s\n" -Dlibmpv=true > mpv_options
+        printf "%s\n" -Duchardet=enabled > mpv_options
         printf "%s\n" -Dcaca=disabled > mpv_options
         printf "%s\n" -Djpeg=disabled > mpv_options
         printf "%s\n" -Dlibbluray=disabled > mpv_options
@@ -95,6 +96,7 @@ jobs:
         echo "build options added"
         
         ./use-sndio-master
+        ./use-uchardet-master
         ./use-rubberband-master
         ./use-ffmpeg-master
         ./use-libass-master

@@ -6,6 +6,8 @@ export LC_ALL=C
 #scripts/fribidi-build "$@"
 scripts/sndio-config
 scripts/sndio-build "$@"
+scripts/uchardet-config
+scripts/uchardet-build "$@"
 scripts/rubberband-config
 scripts/rubberband-build "$@"
 scripts/libplacebo-config
