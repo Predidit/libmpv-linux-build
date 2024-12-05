@@ -44,7 +44,7 @@ jobs:
             libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
             libv4l-dev libva-dev libvdpau-dev libvorbis-dev libvo-amrwbenc-dev \
             libunwind-dev libvpx-dev libwayland-dev libx11-dev libxext-dev \
-            libxkbcommon-dev libxpresent-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
+            libxkbcommon-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
             unixodbc-dev libpq-dev libxxhash-dev libaom-dev
@@ -97,6 +97,7 @@ jobs:
 
         echo "build options added"
         
+        ./use-libxpresent-master
         ./use-sndio-master
         ./use-uchardet-master
         ./use-rubberband-master
