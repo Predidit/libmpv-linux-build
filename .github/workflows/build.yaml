@@ -95,7 +95,7 @@ jobs:
         > mpv_options
         printf "%s\n" -Dlibmpv=true >> mpv_options
         printf "%s\n" -Duchardet=enabled >> mpv_options
-        printf "%s\n" -Dsndio=disabled >> mpv_options
+        printf "%s\n" -Dsndio=enabled >> mpv_options
         printf "%s\n" -Dcaca=disabled >> mpv_options
         printf "%s\n" -Djpeg=disabled >> mpv_options
         printf "%s\n" -Dlibbluray=disabled >> mpv_options
