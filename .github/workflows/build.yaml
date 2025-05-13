@@ -108,7 +108,7 @@ jobs:
         ./use-libxpresent-master
         ./use-uchardet-master
         ./use-rubberband-master
-        ./use-ffmpeg-master
+        ./use-ffmpeg-custom release/7.1
         ./use-libass-master
         ./use-libplacebo-master
         ./use-mpv-release
