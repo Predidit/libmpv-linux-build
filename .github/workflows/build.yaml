@@ -144,26 +144,14 @@ jobs:
         name: mpv-binary
         path: artifacts
 
-    - name: Uploading packages to Github release
-      id: upload_packages_gh
+    - name: Prepare release packages
       if: ${{ github.event.inputs.github_release == 'true'}}
-      continue-on-error: true
       run: |
-        short_date=$(date "+%Y%m%d")
         arch=$(uname -m)
+        short_date=$(date "+%Y%m%d")
         
-        body=$(cat <<END
-        **Workflow run**: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
-        END
-        )
-        id=$(curl -u Predidit:$GH_TOKEN $CURL_RETRIES -s -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Predidit/libmpv-linux-build/releases -d @- <<END | jq -r '.id'
-        {
-          "tag_name": "$short_date",
-          "name": "$short_date",
-          "body": "$(echo ${body//$'\n'/'\n'})"
-        }
-        END
-        )
+        # Set release tag as environment variable
+        echo "RELEASE_TAG=${short_date}" >> $GITHUB_ENV
         
         # Package libmpv.so.2
         libmpv_file="$GITHUB_WORKSPACE/artifacts/libmpv.so.2"
@@ -172,13 +160,9 @@ jobs:
         if [ -f "$libmpv_file" ]; then
           echo "Packaging libmpv.so.2 as $libmpv_archive"
           zip -j $libmpv_archive $libmpv_file
-          
-          curl -u Predidit:$GH_TOKEN $CURL_RETRIES -X POST -H "Accept: application/vnd.github.v3+json" \
-            -H "Content-Type: application/zip" \
-            https://uploads.github.com/repos/Predidit/libmpv-linux-build/releases/$id/assets?name=$libmpv_archive \
-            --data-binary @$libmpv_archive
         else
-          echo "libmpv.so.2 not found at $libmpv_file, skipping upload."
+          echo "libmpv.so.2 not found at $libmpv_file"
+          exit 1
         fi
         
         # Package header files from include/mpv
@@ -190,11 +174,22 @@ jobs:
           cd $GITHUB_WORKSPACE/include
           zip -r $GITHUB_WORKSPACE/$header_archive mpv/
           cd $GITHUB_WORKSPACE
-          
-          curl -u Predidit:$GH_TOKEN $CURL_RETRIES -X POST -H "Accept: application/vnd.github.v3+json" \
-            -H "Content-Type: application/zip" \
-            https://uploads.github.com/repos/Predidit/libmpv-linux-build/releases/$id/assets?name=$header_archive \
-            --data-binary @$header_archive
         else
-          echo "Header directory not found at $header_dir, skipping upload."
+          echo "Header directory not found at $header_dir"
+          exit 1
         fi
+
+    - name: Create Github release
+      if: ${{ github.event.inputs.github_release == 'true'}}
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.RELEASE_TAG }}
+        name: Release ${{ env.RELEASE_TAG }}
+        body: |
+          **Workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        files: |
+          libmpv_*.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
