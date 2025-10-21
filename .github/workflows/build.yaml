@@ -67,13 +67,6 @@ jobs:
         tar -xf vulkan-sdk.tar.xz -C ${VULKAN_SDK_PATH} --strip-components=1
         rm -f vulkan-sdk.tar.xz
 
-        # Export Vulkan environment variables to GITHUB_ENV for subsequent steps
-        echo "VULKAN_SDK=${VULKAN_SDK_PATH}/x86_64" >> $GITHUB_ENV
-        echo "PATH=${VULKAN_SDK_PATH}/x86_64/bin:${PATH}" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=${VULKAN_SDK_PATH}/x86_64/lib:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
-        echo "PKG_CONFIG_PATH=${VULKAN_SDK_PATH}/x86_64/lib/pkgconfig:${PKG_CONFIG_PATH}" >> $GITHUB_ENV
-        echo "VK_LAYER_PATH=${VULKAN_SDK_PATH}/x86_64/etc/vulkan/explicit_layer.d" >> $GITHUB_ENV
-
     - name: Build MPV
       run: |
         PATCH_DIR="${GITHUB_WORKSPACE}/patch"
