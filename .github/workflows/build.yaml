@@ -49,9 +49,7 @@ jobs:
             libxkbcommon-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
-            unixodbc-dev libpq-dev libxxhash-dev libaom-dev \
-            libvulkan-dev vulkan-utility-libraries-dev spirv-tools libshaderc-dev \
-            mesa-vulkan-drivers libva-drm2 libva-wayland2 libva-x11-2 libdisplay-info-dev
+            unixodbc-dev libpq-dev libxxhash-dev libaom-dev
         pip3 install meson
 
     - name: Install Vulkan
@@ -123,6 +121,7 @@ jobs:
         ./use-libxpresent-master
         ./use-uchardet-master
         ./use-rubberband-master
+        ./use-libdisplay-info-master
         ./use-ffmpeg-custom release/7.1
         ./use-libass-master
         ./use-libplacebo-master

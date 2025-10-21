@@ -24,6 +24,7 @@ do_clone_all()
     do_clone "uchardet"   "https://gitlab.freedesktop.org/uchardet/uchardet.git"
     do_clone "libxpresent" "https://gitlab.freedesktop.org/xorg/lib/libxpresent.git"
     do_clone "rubberband" "https://github.com/breakfastquay/rubberband.git"
+    do_clone "libdisplay-info" "https://gitlab.freedesktop.org/emersion/libdisplay-info.git"
     do_clone "libass"     "https://github.com/libass/libass.git"
     do_clone "libplacebo" "https://github.com/haasn/libplacebo.git"
     do_clone "mpv"        "https://github.com/mpv-player/mpv.git"
@@ -35,6 +36,16 @@ do_gitmaster()
     (
         cd "$1"
         git checkout origin/master
+        git remote prune origin
+    )
+}
+
+do_gitmain()
+{
+    set -ex
+    (
+        cd "$1"
+        git checkout origin/main
         git remote prune origin
     )
 }
@@ -81,7 +92,15 @@ checkout()
     fi
 
     case "$branch" in
-        master)  do_gitmaster $1;;
+        master)
+            # libdisplay-info uses 'main' as default branch
+            if [ "$1" = "libdisplay-info" ]; then
+                do_gitmain $1
+            else
+                do_gitmaster $1
+            fi
+            ;;
+        main)    do_gitmain $1;;
         release) do_releasetag $1;;
         @*)      do_fixedref $1 "${branch#@}";;  # everything after the '@' prefix
         *)       >&2 printf "%s\n" "Error: Don't know how to checkout '$branch'"
@@ -92,6 +111,7 @@ checkout()
 # fallback targets: release/master/@foo if no config file
 checkout_ffmpeg=master
 #checkout_fribidi=release
+checkout_libdisplay_info=master
 checkout_libass=master
 checkout_libplacebo=master
 checkout_mpv=master
@@ -103,6 +123,7 @@ checkout_all()
     do_clone_all
     checkout ffmpeg $checkout_ffmpeg
     #$checkout fribidi $checkout_fribidi
+    checkout libdisplay-info $checkout_libdisplay_info
     checkout libass $checkout_libass
     checkout libplacebo $checkout_libplacebo
     checkout mpv $checkout_mpv
