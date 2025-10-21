@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+BUILD="$(pwd)"
+newline="
+"
+
+if test -f "$BUILD"/libdisplay_info_options ; then
+    IFS=$newline
+    set -- $(cat "$BUILD"/libdisplay_info_options) "$@"
+    unset -v IFS
+fi
+
+OPTIONS="-Ddefault_library=static -Dtests=false -Dexamples=false"
+
+case "$PKG_CONFIG_PATH" in
+  '')
+    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig"
+    ;;
+  *)
+    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:$PKG_CONFIG_PATH"
+    ;;
+esac
+
+cd "$BUILD"/libdisplay-info
+
+test -d build && OPTIONS="$OPTIONS --wipe"
+echo Using libdisplay-info options: $OPTIONS "$@"
+
+meson setup build --prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib" $OPTIONS "$@"

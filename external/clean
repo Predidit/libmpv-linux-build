@@ -8,6 +8,7 @@ scripts/sndio-clean
 scripts/uchardet-clean
 scripts/bzip2-clean
 scripts/libxpresent-clean
+scripts/libdisplay-info-clean
 scripts/libass-clean
 scripts/libplacebo-clean
 scripts/mpv-clean
