@@ -51,7 +51,7 @@ jobs:
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
             unixodbc-dev libpq-dev libxxhash-dev libaom-dev \
             libvulkan-dev vulkan-utility-libraries-dev spirv-tools libshaderc-dev \
-            mesa-vulkan-drivers libva-drm2 libva-wayland2 libva-x11-2
+            mesa-vulkan-drivers libva-drm2 libva-wayland2 libva-x11-2 libdisplay-info-dev
         pip3 install meson
 
     - name: Install Vulkan
@@ -123,6 +123,7 @@ jobs:
         printf "%s\n" -Dvdpau=enabled >> mpv_options
         printf "%s\n" -Ddrm=enabled >> mpv_options
         printf "%s\n" -Degl-drm=enabled >> mpv_options
+        printf "%s\n" -Degl-wayland=enabled >> mpv_options
 
         echo "build options added"
         
