@@ -11,7 +11,7 @@ if test -f "$BUILD"/libdisplay_info_options ; then
     unset -v IFS
 fi
 
-OPTIONS="-Ddefault_library=static -Dtests=false -Dexamples=false"
+OPTIONS="-Ddefault_library=static"
 
 case "$PKG_CONFIG_PATH" in
   '')
