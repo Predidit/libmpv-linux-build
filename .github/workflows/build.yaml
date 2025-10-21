@@ -118,12 +118,14 @@ jobs:
         printf "%s\n" -Dlibbluray=disabled >> mpv_options
         printf "%s\n" -Dsixel=disabled >> mpv_options
         
-        printf "%s\n" -Dvulkan=enabled >> mpv_options
+        printf "%s\n" -Dvulkan=disabled >> mpv_options
         printf "%s\n" -Dvaapi=enabled >> mpv_options
+        printf "%s\n" -Dvaapi-wayland=enabled >> mpv_options
         printf "%s\n" -Dvdpau=enabled >> mpv_options
         printf "%s\n" -Ddrm=enabled >> mpv_options
         printf "%s\n" -Degl-drm=enabled >> mpv_options
         printf "%s\n" -Degl-wayland=enabled >> mpv_options
+        printf "%s\n" -Ddmabuf-wayland=enabled >> mpv_options
 
         echo "build options added"
         
