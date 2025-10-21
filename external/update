@@ -40,6 +40,16 @@ do_gitmaster()
     )
 }
 
+do_gitmain()
+{
+    set -ex
+    (
+        cd "$1"
+        git checkout origin/main
+        git remote prune origin
+    )
+}
+
 versort_with_prefix()
 {
 	# Emulate sort -V using a known prefix. Filter out anything else.
@@ -82,7 +92,14 @@ checkout()
     fi
 
     case "$branch" in
-        master)  do_gitmaster $1;;
+        master)
+            # libdisplay-info uses 'main' as default branch
+            if [ "$1" = "libdisplay-info" ]; then
+                do_gitmain $1
+            else
+                do_gitmaster $1
+            fi
+            ;;
         release) do_releasetag $1;;
         @*)      do_fixedref $1 "${branch#@}";;  # everything after the '@' prefix
         *)       >&2 printf "%s\n" "Error: Don't know how to checkout '$branch'"
