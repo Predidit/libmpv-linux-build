@@ -108,6 +108,7 @@ jobs:
         printf "%s\n" -Djpeg=disabled >> mpv_options
         printf "%s\n" -Dlibbluray=disabled >> mpv_options
         printf "%s\n" -Dsixel=disabled >> mpv_options
+        printf "%s\n" -Dcdda=disabled >> mpv_options
         
         printf "%s\n" -Dvulkan=disabled >> mpv_options
         printf "%s\n" -Dvaapi=enabled >> mpv_options
