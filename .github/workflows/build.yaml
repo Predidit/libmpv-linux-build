@@ -49,6 +49,11 @@ jobs:
         # Install wayland-protocols >= 1.38 from proposed repository
         sudo apt install -y -t $(lsb_release -sc)-proposed wayland-protocols
         
+        # Remove proposed repository to ensure other packages use stable versions
+        sudo add-apt-repository -y --remove "deb $MIRROR $(lsb_release -sc)-proposed main"
+        sudo apt update
+        
+        # Install other dependencies from stable repository
         sudo apt install -y gcc g++ autoconf automake debhelper glslang-dev ladspa-sdk xutils-dev libasound2-dev \
             libarchive-dev libbluray-dev libbs2b-dev libcaca-dev libcdio-paranoia-dev libdrm-dev \
             libdav1d-dev libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
