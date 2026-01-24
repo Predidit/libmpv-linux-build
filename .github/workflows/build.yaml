@@ -36,19 +36,6 @@ jobs:
 
     - name: Setup environment
       run: |
-        # Enable proposed repository for newer wayland-protocols
-        ARCH=$(dpkg --print-architecture)
-        if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "armhf" ]; then
-          MIRROR="http://ports.ubuntu.com/ubuntu-ports"
-        else
-          MIRROR="http://archive.ubuntu.com/ubuntu"
-        fi
-        sudo add-apt-repository -y "deb $MIRROR $(lsb_release -sc)-proposed main"
-        sudo apt update
-        
-        # Install wayland-protocols >= 1.38 from proposed repository
-        sudo apt install -y -t $(lsb_release -sc)-proposed wayland-protocols
-        
         sudo apt install -y gcc g++ autoconf automake debhelper glslang-dev ladspa-sdk xutils-dev libasound2-dev \
             libarchive-dev libbluray-dev libbs2b-dev libcaca-dev libcdio-paranoia-dev libdrm-dev \
             libdav1d-dev libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
@@ -63,6 +50,19 @@ jobs:
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
             unixodbc-dev libpq-dev libxxhash-dev libaom-dev
         pip3 install meson
+
+        # Enable proposed repository for newer wayland-protocols
+        ARCH=$(dpkg --print-architecture)
+        if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "armhf" ]; then
+          MIRROR="http://ports.ubuntu.com/ubuntu-ports"
+        else
+          MIRROR="http://archive.ubuntu.com/ubuntu"
+        fi
+        sudo add-apt-repository -y "deb $MIRROR $(lsb_release -sc)-proposed main"
+        sudo apt update
+        
+        # Install wayland-protocols >= 1.38 from proposed repository
+        sudo apt install -y -t $(lsb_release -sc)-proposed wayland-protocols
 
     - name: Install Vulkan
       run: |
