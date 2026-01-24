@@ -43,14 +43,14 @@ jobs:
         else
           MIRROR="http://archive.ubuntu.com/ubuntu"
         fi
-        sudo add-apt-repository -y "deb $MIRROR $(lsb_release -sc)-proposed main"
+        sudo add-apt-repository -y "deb $MIRROR $(lsb_release -sc)-updates main"
         sudo apt update
         
-        # Install wayland-protocols >= 1.38 from proposed repository
-        sudo apt install -y -t $(lsb_release -sc)-proposed wayland-protocols
+        # Install wayland-protocols >= 1.38 from updates repository
+        sudo apt install -y -t $(lsb_release -sc)-updates wayland-protocols
         
-        # Remove proposed repository to ensure other packages use stable versions
-        sudo add-apt-repository -y --remove "deb $MIRROR $(lsb_release -sc)-proposed main"
+        # Remove updates repository to ensure other packages use stable versions
+        sudo add-apt-repository -y --remove "deb $MIRROR $(lsb_release -sc)-updates main"
         sudo apt update
         
         # Install other dependencies from stable repository
