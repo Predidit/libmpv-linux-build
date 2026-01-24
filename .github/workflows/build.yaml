@@ -36,24 +36,6 @@ jobs:
 
     - name: Setup environment
       run: |
-        # Enable proposed repository for newer wayland-protocols
-        ARCH=$(dpkg --print-architecture)
-        if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "armhf" ]; then
-          MIRROR="http://ports.ubuntu.com/ubuntu-ports"
-        else
-          MIRROR="http://archive.ubuntu.com/ubuntu"
-        fi
-        sudo add-apt-repository -y "deb $MIRROR $(lsb_release -sc)-updates main"
-        sudo apt update
-        
-        # Install wayland-protocols >= 1.38 from updates repository
-        sudo apt install -y -t $(lsb_release -sc)-updates wayland-protocols libwayland-dev
-        
-        # Remove updates repository to ensure other packages use stable versions
-        sudo add-apt-repository -y --remove "deb $MIRROR $(lsb_release -sc)-updates main"
-        sudo apt update
-        
-        # Install other dependencies from stable repository
         sudo apt install -y gcc g++ autoconf automake debhelper glslang-dev ladspa-sdk xutils-dev libasound2-dev \
             libarchive-dev libbluray-dev libbs2b-dev libcaca-dev libcdio-paranoia-dev libdrm-dev \
             libdav1d-dev libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
@@ -62,7 +44,7 @@ jobs:
             libopus-dev libopencore-amrnb-dev libopencore-amrwb-dev libpulse-dev librtmp-dev \
             libsdl2-dev libsixel-dev libssh-dev libsoxr-dev libspeex-dev libtool \
             libv4l-dev libva-dev libvdpau-dev libvorbis-dev libvo-amrwbenc-dev \
-            libunwind-dev libvpx-dev libx11-dev libxext-dev \
+            libunwind-dev libvpx-dev wayland-protocols libwayland-dev libx11-dev libxext-dev \
             libxkbcommon-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils \
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
@@ -144,7 +126,7 @@ jobs:
         ./use-ffmpeg-custom release/7.1
         ./use-libass-master
         ./use-libplacebo-master
-        ./use-mpv-master
+        ./use-mpv-custom 95c7599c41a4c7e332848fdb7e594650c1564e45
 
         echo "updating submodules"
 
@@ -154,7 +136,22 @@ jobs:
         
         ls -l
         cd ffmpeg
-        for PATCH_FILE in $PATCH_DIR/*.patch; do
+        for PATCH_FILE in $PATCH_DIR/ffmpeg/*.patch; do
+          if [ -f "$PATCH_FILE" ]; then
+            echo "Applying patch: $PATCH_FILE"
+            git apply "$PATCH_FILE"
+          else
+            echo "No patch files found in $PATCH_DIR"
+            exit 1
+          fi
+        done
+        cd ../
+
+        echo "applying patches to mpv"
+        
+        ls -l
+        cd mpv
+        for PATCH_FILE in $PATCH_DIR/mpv/*.patch; do
           if [ -f "$PATCH_FILE" ]; then
             echo "Applying patch: $PATCH_FILE"
             git apply "$PATCH_FILE"
