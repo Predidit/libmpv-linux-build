@@ -144,7 +144,7 @@ jobs:
         ./use-ffmpeg-custom release/7.1
         ./use-libass-master
         ./use-libplacebo-master
-        ./use-mpv-release
+        ./use-mpv-master
 
         echo "updating submodules"
 
