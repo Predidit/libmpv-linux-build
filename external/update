@@ -19,6 +19,7 @@ do_clone_all()
 {
     do_clone "ffmpeg"     "https://github.com/FFmpeg/FFmpeg.git"
     #do_clone "fribidi"    "http://anongit.freedesktop.org/git/fribidi/fribidi.git"
+    do_clone "wayland"    "https://gitlab.freedesktop.org/wayland/wayland.git"
     do_clone "bzip2"      "https://github.com/libarchive/bzip2.git"
     do_clone "uchardet"   "https://gitlab.freedesktop.org/uchardet/uchardet.git"
     do_clone "libxpresent" "https://gitlab.freedesktop.org/xorg/lib/libxpresent.git"
@@ -110,6 +111,7 @@ checkout()
 # fallback targets: release/master/@foo if no config file
 checkout_ffmpeg=master
 #checkout_fribidi=release
+checkout_wayland=master
 checkout_libdisplay_info=master
 checkout_libass=master
 checkout_libplacebo=master
@@ -122,6 +124,7 @@ checkout_all()
     do_clone_all
     checkout ffmpeg $checkout_ffmpeg
     #$checkout fribidi $checkout_fribidi
+    checkout wayland $checkout_wayland
     checkout libdisplay-info $checkout_libdisplay_info
     checkout libass $checkout_libass
     checkout libplacebo $checkout_libplacebo
@@ -147,6 +150,7 @@ case "$1" in
     --master)
         checkout_ffmpeg="master -"
         #checkout_fribidi="master -"
+        checkout_wayland="master -"
         checkout_libass="master -"
         checkout_libplacebo="master -"
         checkout_mpv="master -"

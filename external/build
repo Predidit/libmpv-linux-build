@@ -4,6 +4,8 @@ export LC_ALL=C
 
 #scripts/fribidi-config
 #scripts/fribidi-build "$@"
+scripts/wayland-config
+scripts/wayland-build "$@"
 scripts/bzip2-config
 scripts/bzip2-build "$@"
 scripts/uchardet-config

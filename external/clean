@@ -3,6 +3,7 @@ export LC_ALL=C
 
 scripts/ffmpeg-clean
 scripts/fribidi-clean
+scripts/wayland-clean
 scripts/rubberband-clean
 scripts/uchardet-clean
 scripts/bzip2-clean
