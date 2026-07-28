@@ -124,10 +124,10 @@ jobs:
         ./use-uchardet-master
         ./use-rubberband-master
         ./use-libdisplay-info-master
-        ./use-ffmpeg-custom release/7.1
+        ./use-ffmpeg-custom n7.1.5
         ./use-libass-master
-        ./use-libplacebo-master
-        ./use-mpv-custom 95c7599c41a4c7e332848fdb7e594650c1564e45
+        ./use-libplacebo-custom 4c426e466814536def653cb23f1d1c287ea7a7f5
+        ./use-mpv-custom f011d73d5fcf3f1907bbd6ddde3e860e3d611cf9
 
         echo "updating submodules"
 
@@ -149,15 +149,14 @@ jobs:
         cd ../
 
         echo "applying patches to mpv"
-        
-        ls -l
+
         cd mpv
         for PATCH_FILE in $PATCH_DIR/mpv/*.patch; do
           if [ -f "$PATCH_FILE" ]; then
             echo "Applying patch: $PATCH_FILE"
             git apply "$PATCH_FILE"
           else
-            echo "No patch files found in $PATCH_DIR"
+            echo "No patch files found in $PATCH_DIR/mpv"
             exit 1
           fi
         done
