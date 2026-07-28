@@ -39,7 +39,7 @@ jobs:
         sudo apt update
         sudo apt install -y gcc g++ autoconf automake debhelper glslang-dev ladspa-sdk xutils-dev libasound2-dev \
             libarchive-dev libbluray-dev libbs2b-dev libcaca-dev libcdio-paranoia-dev libdrm-dev \
-            libdav1d-dev libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
+            libdvdnav-dev libegl1-mesa-dev libepoxy-dev libfontconfig-dev libfreetype6-dev \
             libfribidi-dev libgl1-mesa-dev libgbm-dev libgme-dev libgsm1-dev libharfbuzz-dev libjpeg-dev \
             libbrotli-dev liblcms2-dev libmodplug-dev libmp3lame-dev libopenal-dev \
             libopus-dev libopencore-amrnb-dev libopencore-amrwb-dev libpulse-dev librtmp-dev \
@@ -125,6 +125,7 @@ jobs:
         ./use-uchardet-master
         ./use-rubberband-master
         ./use-libdisplay-info-master
+        ./use-dav1d-custom 1.5.4
         ./use-ffmpeg-custom n7.1.5
         ./use-libass-master
         ./use-libplacebo-custom 4c426e466814536def653cb23f1d1c287ea7a7f5
@@ -171,6 +172,11 @@ jobs:
         grep -q '^#define CONFIG_LIBDAV1D_DECODER 1$' ffmpeg_build/config_components.h
         ./mpv/build/mpv --no-config --vd=help > /tmp/mpv-video-decoders.txt 2>&1
         grep -q libdav1d /tmp/mpv-video-decoders.txt
+        test -f build_libs/lib/libdav1d.a
+        if readelf -d mpv/build/libmpv.so.2 | grep -q 'NEEDED.*libdav1d\.so'; then
+          echo "libmpv.so.2 unexpectedly depends on shared libdav1d"
+          exit 1
+        fi
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
