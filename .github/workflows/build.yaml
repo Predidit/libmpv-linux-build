@@ -126,8 +126,8 @@ jobs:
         ./use-libdisplay-info-master
         ./use-ffmpeg-custom n7.1.5
         ./use-libass-master
-        ./use-libplacebo-master
-        ./use-mpv-custom 95c7599c41a4c7e332848fdb7e594650c1564e45
+        ./use-libplacebo-custom 4c426e466814536def653cb23f1d1c287ea7a7f5
+        ./use-mpv-custom 48e6c35c0e056d9e4ff04b98e012416697736d8a
 
         echo "updating submodules"
 
@@ -138,21 +138,6 @@ jobs:
         ls -l
         cd ffmpeg
         for PATCH_FILE in $PATCH_DIR/ffmpeg/*.patch; do
-          if [ -f "$PATCH_FILE" ]; then
-            echo "Applying patch: $PATCH_FILE"
-            git apply "$PATCH_FILE"
-          else
-            echo "No patch files found in $PATCH_DIR"
-            exit 1
-          fi
-        done
-        cd ../
-
-        echo "applying patches to mpv"
-        
-        ls -l
-        cd mpv
-        for PATCH_FILE in $PATCH_DIR/mpv/*.patch; do
           if [ -f "$PATCH_FILE" ]; then
             echo "Applying patch: $PATCH_FILE"
             git apply "$PATCH_FILE"
