@@ -26,6 +26,7 @@ do_clone_all()
     do_clone "libdisplay-info" "https://gitlab.freedesktop.org/emersion/libdisplay-info.git"
     do_clone "libass"     "https://github.com/libass/libass.git"
     do_clone "libplacebo" "https://github.com/haasn/libplacebo.git"
+    do_clone "dav1d"      "https://code.videolan.org/videolan/dav1d.git"
     do_clone "mpv"        "https://github.com/mpv-player/mpv.git"
 }
 
@@ -113,6 +114,7 @@ checkout_ffmpeg=master
 checkout_libdisplay_info=master
 checkout_libass=master
 checkout_libplacebo=master
+checkout_dav1d=master
 checkout_mpv=master
 
 
@@ -125,6 +127,7 @@ checkout_all()
     checkout libdisplay-info $checkout_libdisplay_info
     checkout libass $checkout_libass
     checkout libplacebo $checkout_libplacebo
+    checkout dav1d $checkout_dav1d
     checkout mpv $checkout_mpv
 }
 
@@ -149,6 +152,7 @@ case "$1" in
         #checkout_fribidi="master -"
         checkout_libass="master -"
         checkout_libplacebo="master -"
+        checkout_dav1d="master -"
         checkout_mpv="master -"
         ;;
     --release)
