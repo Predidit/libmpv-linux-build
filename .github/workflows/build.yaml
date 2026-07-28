@@ -124,7 +124,7 @@ jobs:
         ./use-uchardet-master
         ./use-rubberband-master
         ./use-libdisplay-info-master
-        ./use-ffmpeg-custom release/7.1
+        ./use-ffmpeg-custom n7.1.5
         ./use-libass-master
         ./use-libplacebo-master
         ./use-mpv-custom 95c7599c41a4c7e332848fdb7e594650c1564e45
