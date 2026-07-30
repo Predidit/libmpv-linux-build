@@ -86,6 +86,7 @@ jobs:
         printf "%s\n" --enable-libdav1d >> ffmpeg_options
 
         printf "%s\n" --disable-bzlib >> ffmpeg_options
+        printf "%s\n" --disable-sndio >> ffmpeg_options
         printf "%s\n" --disable-outdevs >> ffmpeg_options
         printf "%s\n" --disable-filters >> ffmpeg_options
         printf "%s\n" --disable-muxers >> ffmpeg_options
@@ -166,6 +167,30 @@ jobs:
 
         ./clean
         ./build -j$(nproc)
+
+        echo "verifying sndio support is disabled"
+        grep -q '^#define CONFIG_SNDIO_INDEV 0$' ffmpeg_build/config_components.h
+        grep -q '^#define CONFIG_SNDIO_OUTDEV 0$' ffmpeg_build/config_components.h
+        python3 - <<'PY'
+        import json
+
+        with open("mpv/build/meson-info/intro-buildoptions.json", encoding="utf-8") as file:
+            options = {option["name"]: option["value"] for option in json.load(file)}
+
+        if options.get("sndio") != "disabled":
+            raise SystemExit(f"mpv sndio support is not disabled: {options.get('sndio')!r}")
+        PY
+
+        for artifact in mpv/build/mpv mpv/build/libmpv.so.2; do
+          if readelf -d "$artifact" | grep -qi 'libsndio\.so'; then
+            echo "$artifact unexpectedly has a direct dependency on libsndio.so"
+            exit 1
+          fi
+          if ldd "$artifact" | grep -qi 'libsndio\.so'; then
+            echo "$artifact unexpectedly has a transitive dependency on libsndio.so"
+            exit 1
+          fi
+        done
 
         echo "verifying AV1 software decoder support"
         grep -q '^#define CONFIG_LIBDAV1D 1$' ffmpeg_build/config.h
