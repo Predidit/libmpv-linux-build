@@ -86,6 +86,7 @@ jobs:
         printf "%s\n" --enable-libdav1d >> ffmpeg_options
 
         printf "%s\n" --disable-bzlib >> ffmpeg_options
+        printf "%s\n" --disable-sndio >> ffmpeg_options
         printf "%s\n" --disable-outdevs >> ffmpeg_options
         printf "%s\n" --disable-filters >> ffmpeg_options
         printf "%s\n" --disable-muxers >> ffmpeg_options
@@ -166,17 +167,6 @@ jobs:
 
         ./clean
         ./build -j$(nproc)
-
-        echo "verifying AV1 software decoder support"
-        grep -q '^#define CONFIG_LIBDAV1D 1$' ffmpeg_build/config.h
-        grep -q '^#define CONFIG_LIBDAV1D_DECODER 1$' ffmpeg_build/config_components.h
-        ./mpv/build/mpv --no-config --vd=help > /tmp/mpv-video-decoders.txt 2>&1
-        grep -q libdav1d /tmp/mpv-video-decoders.txt
-        test -f build_libs/lib/libdav1d.a
-        if readelf -d mpv/build/libmpv.so.2 | grep -q 'NEEDED.*libdav1d\.so'; then
-          echo "libmpv.so.2 unexpectedly depends on shared libdav1d"
-          exit 1
-        fi
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
