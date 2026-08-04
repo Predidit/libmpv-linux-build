@@ -1,0 +1,13 @@
+diff --git a/video/out/gpu/shader_cache.c b/video/out/gpu/shader_cache.c
+index 889e5e85d3..1ff1f4d7bf 100644
+--- a/video/out/gpu/shader_cache.c
++++ b/video/out/gpu/shader_cache.c
+@@ -793,4 +793,8 @@ static void gl_sc_generate(struct gl_shader_cache *sc,
++        ADD(header, "#ifdef GL_FRAGMENT_PRECISION_HIGH\n");
++        ADD(header, "precision highp sampler2D;\n");
++        ADD(header, "#else\n");
+         ADD(header, "precision mediump sampler2D;\n");
++        ADD(header, "#endif\n");
+         if (sc->ra->caps & RA_CAP_TEX_3D)
+             ADD(header, "precision mediump sampler3D;\n");
+     }
