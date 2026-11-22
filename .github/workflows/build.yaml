@@ -126,7 +126,7 @@ jobs:
         ./use-uchardet-master
         ./use-rubberband-master
         ./use-libdisplay-info-master
-        ./use-dav1d-custom 1.5.4
+        ./use-dav1d-custom 1.5.5
         ./use-ffmpeg-custom n7.1.5
         ./use-libass-master
         ./use-libplacebo-custom 4c426e466814536def653cb23f1d1c287ea7a7f5
