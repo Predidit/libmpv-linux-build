@@ -1,9 +1,9 @@
 diff --git a/libavformat/hls.c b/libavformat/hls.c
-index 900e96c..5bf01f7 100644
+index 91bc7fa..2889050 100644
 --- a/libavformat/hls.c
 +++ b/libavformat/hls.c
-@@ -84,6 +84,8 @@ struct segment {
-     uint8_t iv[16];
+@@ -88,6 +88,8 @@ struct segment {
+     uint64_t discontinuity_seq;
      /* associated Media Initialization Section, treated as a segment */
      struct segment *init_section;
 +    /* Kazumi: Segment follows a DISCONTINUITY tag */
@@ -11,7 +11,7 @@ index 900e96c..5bf01f7 100644
  };
  
  struct rendition;
-@@ -222,6 +224,7 @@ typedef struct HLSContext {
+@@ -282,6 +284,7 @@ typedef struct HLSContext {
      AVIOInterruptCB *interrupt_callback;
      AVDictionary *avio_opts;
      AVDictionary *seg_format_opts;
@@ -19,7 +19,7 @@ index 900e96c..5bf01f7 100644
      char *allowed_extensions;
      char *allowed_segment_extensions;
      int extension_picky;
-@@ -232,6 +235,12 @@ typedef struct HLSContext {
+@@ -292,6 +295,12 @@ typedef struct HLSContext {
      int seg_max_retry;
      AVIOContext *playlist_pb;
      HLSCryptoContext  crypto_ctx;
@@ -32,20 +32,19 @@ index 900e96c..5bf01f7 100644
  } HLSContext;
  
  static void free_segment_dynarray(struct segment **segments, int n_segments)
-@@ -804,6 +813,8 @@ static int parse_playlist(HLSContext *c, const char *url,
-     struct segment **prev_segments = NULL;
-     int prev_n_segments = 0;
-     int64_t prev_start_seq_no = -1;
+@@ -1026,6 +1035,8 @@ static int parse_playlist(HLSContext *c, const char *url,
+     int64_t start_time_offset = 0;
+     int time_offset_flag = 0;
+     int finished = 0;
 +    /* Kazumi: Track if next segment follows DISCONTINUITY */
 +    int next_seg_after_discontinuity = 0;
  
      if (is_http && !in && c->http_persistent && c->playlist_pb) {
          in = c->playlist_pb;
-@@ -975,6 +986,15 @@ static int parse_playlist(HLSContext *c, const char *url,
-         } else if (av_strstart(line, "#EXT-X-ENDLIST", &ptr)) {
-             if (pls)
-                 pls->finished = 1;
-+        } else if (av_strstart(line, "#EXT-X-DISCONTINUITY", NULL)) {
+@@ -1207,6 +1218,14 @@ static int parse_playlist(HLSContext *c, const char *url,
+             discontinuity_seq = strtoull(ptr, NULL, 10);
+         } else if (!strcmp(line, "#EXT-X-DISCONTINUITY")) {
+             discontinuity_seq++;
 +            /* Kazumi: Mark that stream has discontinuity and next segment follows it */
 +            if (c->hls_ad_filter) {
 +                if (!c->has_discontinuity) {
@@ -57,7 +56,7 @@ index 900e96c..5bf01f7 100644
          } else if (av_strstart(line, "#EXTINF:", &ptr)) {
              double d = atof(ptr) * AV_TIME_BASE;
              if (d < 0 || d > INT64_MAX || isnan(d)) {
-@@ -1083,6 +1103,9 @@ static int parse_playlist(HLSContext *c, const char *url,
+@@ -1316,6 +1335,9 @@ static int parse_playlist(HLSContext *c, const char *url,
                  }
  
                  seg->init_section = cur_init_section;
@@ -67,16 +66,16 @@ index 900e96c..5bf01f7 100644
              }
          }
      }
-@@ -2012,6 +2035,8 @@ static int hls_read_header(AVFormatContext *s)
-     c->first_packet = 1;
-     c->first_timestamp = AV_NOPTS_VALUE;
+@@ -2662,6 +2684,8 @@ static int hls_read_header(AVFormatContext *s)
+     c->first_timestamp_pls = NULL;
+     c->first_timestamp_locked = 0;
      c->cur_timestamp = AV_NOPTS_VALUE;
 +    /* Kazumi: Initialize ad filtering state */
 +    c->last_main_pts = AV_NOPTS_VALUE;
  
      if ((ret = ffio_copy_url_options(s->pb, &c->avio_opts)) < 0)
          return ret;
-@@ -2186,7 +2211,56 @@ static int hls_read_header(AVFormatContext *s)
+@@ -2869,7 +2893,56 @@ static int hls_read_header(AVFormatContext *s)
              pls->ctx->max_analyze_duration = s->max_analyze_duration > 0 ? s->max_analyze_duration : 4 * AV_TIME_BASE;
              pls->ctx->interrupt_callback = s->interrupt_callback;
              url = av_strdup(pls->segments[0]->url);
@@ -134,13 +133,13 @@ index 900e96c..5bf01f7 100644
  
              for (int n = 0; n < pls->n_segments; n++)
                  if (ret >= 0)
-@@ -2406,6 +2480,67 @@ static int hls_read_packet(AVFormatContext *s, AVPacket *pkt)
+@@ -3186,6 +3259,67 @@ retry:
                  }
  
                  seg = current_segment(pls);
 +
 +                /* Kazumi: PTS-based ad filtering - filter ALL packets (audio & video) */
-+                if (c->hls_ad_filter && c->has_discontinuity) {
++                if (c->hls_ad_filter && c->has_discontinuity && !pls->is_subtitle) {
 +                    enum AVMediaType pkt_type = pls->ctx->streams[pls->pkt->stream_index]->codecpar->codec_type;
 +                    int64_t current_pts = pls->pkt->pts != AV_NOPTS_VALUE ? pls->pkt->pts : pls->pkt->dts;
 +                    int64_t pts_in_us = AV_NOPTS_VALUE;
@@ -202,7 +201,7 @@ index 900e96c..5bf01f7 100644
                  if (seg && seg->key_type == KEY_SAMPLE_AES && !strstr(pls->ctx->iformat->name, "mov")) {
                      enum AVCodecID codec_id = pls->ctx->streams[pls->pkt->stream_index]->codecpar->codec_id;
                      memcpy(c->crypto_ctx.iv, seg->iv, sizeof(seg->iv));
-@@ -2519,6 +2654,9 @@ static int hls_read_seek(AVFormatContext *s, int stream_index,
+@@ -3341,6 +3475,9 @@ static int hls_read_seek(AVFormatContext *s, int stream_index,
                                 int64_t timestamp, int flags)
  {
      HLSContext *c = s->priv_data;
@@ -212,7 +211,7 @@ index 900e96c..5bf01f7 100644
      struct playlist *seek_pls = NULL;
      int i, j;
      int stream_subdemuxer_index;
-@@ -2632,8 +2770,8 @@ static int hls_probe(const AVProbeData *p)
+@@ -3521,8 +3658,8 @@ static int hls_probe(const AVProbeData *p)
              !mime_x &&
              !av_match_ext    (p->filename, "m3u8,m3u") &&
               ff_match_url_ext(p->filename, "m3u8,m3u") <= 0) {
@@ -223,7 +222,7 @@ index 900e96c..5bf01f7 100644
          }
          if (mime_x)
              av_log(NULL, AV_LOG_WARNING, "mime type is not rfc8216 compliant\n");
-@@ -2683,6 +2821,10 @@ static const AVOption hls_options[] = {
+@@ -3572,6 +3709,10 @@ static const AVOption hls_options[] = {
          OFFSET(seg_format_opts), AV_OPT_TYPE_DICT, {.str = NULL}, 0, 0, FLAGS},
      {"seg_max_retry", "Maximum number of times to reload a segment on error.",
       OFFSET(seg_max_retry), AV_OPT_TYPE_INT, {.i64 = 0}, 0, INT_MAX, FLAGS},
