@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             arch: x86_64
           - os: ubuntu-24.04-arm
             arch: aarch64
@@ -188,6 +188,12 @@ jobs:
 
         mkdir -p $GITHUB_WORKSPACE/artifacts
         cp -r mpv/build/* $GITHUB_WORKSPACE/artifacts
+
+    - name: Inspect libmpv
+      run: |
+        lib="$GITHUB_WORKSPACE/artifacts/libmpv.so.2"
+        readelf -d "$lib" | grep -E 'NEEDED|RPATH|RUNPATH'
+        echo "Highest required glibc: $(objdump -T "$lib" | grep -o 'GLIBC_[0-9.]*' | sort -uV | tail -n 1)"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
