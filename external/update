@@ -80,6 +80,8 @@ do_fixedref()
     (
         cd "$1"
         git checkout "$2"
+        # keep submodules (e.g. libplacebo's 3rdparty) at the pinned revision
+        git submodule update --init
     )
 }
 
