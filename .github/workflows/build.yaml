@@ -129,8 +129,8 @@ jobs:
         ./use-dav1d-custom 1.5.5
         ./use-ffmpeg-custom 359c82515228774eb683dffce9d623b6b4a2fa53
         ./use-libass-master
-        ./use-libplacebo-custom 4c426e466814536def653cb23f1d1c287ea7a7f5
-        ./use-mpv-custom f011d73d5fcf3f1907bbd6ddde3e860e3d611cf9
+        ./use-libplacebo-custom b785229836d6879249ecb21551ba098ed549b5f6
+        ./use-mpv-custom 09cf7a11f27d9caed31b3e8a6c9ddc45ed788c95
 
         echo "updating submodules"
 
