@@ -1,0 +1,53 @@
+From: Predidit <34627277+Predidit@users.noreply.github.com>
+Subject: [PATCH] wayland: build against the libwayland 1.22 of Ubuntu 24.04
+
+mpv requires wayland-scanner >= 1.23 to generate code for the 1.38+
+protocols, and since then also asks for wayland-client/wayland-cursor
+>= 1.23, assuming they are bundled at the same version. This project builds
+on Ubuntu 24.04 (libwayland 1.22) and ships libmpv to systems of that age,
+so it only provides a newer wayland-scanner and keeps compiling and linking
+against the system libwayland.
+
+The generated protocol code only needs libwayland-client >= 1.20, and the
+optional wl_fixes support stays compiled out with 1.22 headers.
+wl_display_create_queue_with_name() is the only 1.23 symbol called
+unconditionally; the queue names are purely a debugging aid, so create the
+queues unnamed. This keeps libmpv loadable against libwayland < 1.23.
+
+diff --git a/meson.build b/meson.build
+index 656d156d0..109e2d319 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1081,8 +1081,8 @@ if features['d3d11']
+ endif
+ 
+ wayland = {
+-    'deps': [dependency('wayland-client', version: '>= 1.23.0', required: get_option('wayland')),
+-             dependency('wayland-cursor', version: '>= 1.23.0', required: get_option('wayland')),
++    'deps': [dependency('wayland-client', version: '>= 1.22.0', required: get_option('wayland')),
++             dependency('wayland-cursor', version: '>= 1.22.0', required: get_option('wayland')),
+              dependency('wayland-protocols', version: '>= 1.38', required: get_option('wayland')),
+              dependency('xkbcommon', version: '>= 0.3.0', required: get_option('wayland'))],
+     'header': cc.has_header('linux/input-event-codes.h', required: get_option('wayland'),
+diff --git a/video/out/wayland_common.c b/video/out/wayland_common.c
+index 1a592cbfc..884544d19 100644
+--- a/video/out/wayland_common.c
++++ b/video/out/wayland_common.c
+@@ -3384,7 +3384,7 @@ static void get_compositor_preferred_description(struct vo_wayland_state *wl)
+         wp_color_management_surface_feedback_v1_get_preferred(wl->color_surface_feedback);
+     struct wp_image_description_info_v1 *description_info =
+         wp_image_description_v1_get_information(image_description);
+-    struct wl_event_queue *image_description_info_queue = wl_display_create_queue_with_name(wl->display, "image description info queue");
++    struct wl_event_queue *image_description_info_queue = wl_display_create_queue(wl->display);
+     wl->image_description_info_done = false;
+     wl_proxy_set_queue((struct wl_proxy *)description_info, image_description_info_queue);
+     wp_image_description_info_v1_add_listener(description_info, &image_description_info_listener, wd);
+@@ -4669,7 +4669,7 @@ bool vo_wayland_init(struct vo *vo)
+     if (wl->color_manager) {
+         wl->color_surface_feedback = wp_color_manager_v1_get_surface_feedback(wl->color_manager, wl->callback_surface);
+         wp_color_management_surface_feedback_v1_add_listener(wl->color_surface_feedback, &surface_feedback_listener, wl);
+-        wl->color_queue = wl_display_create_queue_with_name(wl->display, "image description creator queue");
++        wl->color_queue = wl_display_create_queue(wl->display);
+     } else {
+         MP_VERBOSE(wl, "Compositor doesn't support the %s protocol!\n",
+                    wp_color_manager_v1_interface.name);

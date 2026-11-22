@@ -49,8 +49,26 @@ jobs:
             libxkbcommon-dev libxrandr-dev libxss-dev libxv-dev libxvidcore-dev \
             linux-libc-dev nasm ninja-build pkg-config python3 python3-docutils wayland-protocols \
             x11proto-core-dev zlib1g-dev libfdk-aac-dev libtheora-dev libwebp-dev \
-            unixodbc-dev libpq-dev libxxhash-dev libaom-dev
+            unixodbc-dev libpq-dev libxxhash-dev libaom-dev libexpat1-dev
         pip3 install meson
+
+    - name: Build wayland-scanner
+      run: |
+        # mpv needs wayland-scanner >= 1.23 to generate the 1.38+ protocols,
+        # while Ubuntu 24.04 ships 1.22. Only the scanner is replaced: libmpv
+        # keeps compiling and linking against the system libwayland, so it
+        # still loads on systems of the same age.
+        WAYLAND_VERSION=1.26.0
+        WAYLAND_SRC=${RUNNER_TEMP}/wayland
+        WAYLAND_PREFIX=${RUNNER_TEMP}/wayland-scanner
+
+        git clone --depth 1 --branch ${WAYLAND_VERSION} https://gitlab.freedesktop.org/wayland/wayland.git ${WAYLAND_SRC}
+        meson setup ${WAYLAND_SRC}/build ${WAYLAND_SRC} --prefix=${WAYLAND_PREFIX} \
+            -Dlibraries=false -Dscanner=true -Dtests=false -Ddocumentation=false -Ddtd_validation=false
+        meson install -C ${WAYLAND_SRC}/build
+
+        ${WAYLAND_PREFIX}/bin/wayland-scanner --version
+        echo "${WAYLAND_PREFIX}/bin" >> $GITHUB_PATH
 
     - name: Install Vulkan
       run: |
